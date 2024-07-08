@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.Map; // Add this line
 
 import org.springframework.boot.context.config.ConfigData.Option;
 import org.springframework.boot.origin.SystemEnvironmentOrigin;
@@ -79,18 +80,18 @@ public class Principal {
         .collect(Collectors.toList());
     episodios.forEach(System.out::println);
 
-    System.out.println("Digite o trecho do título que deseja buscar: ");
-    var trechoTitulo = scanner.nextLine();
+    // System.out.println("Digite o trecho do título que deseja buscar: ");
+    // var trechoTitulo = scanner.nextLine();
 
-    Optional<Episodio> episodioBuscado = episodios.stream()
-        .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))
-        .findFirst();
+    // Optional<Episodio> episodioBuscado = episodios.stream()
+    //     .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))
+    //     .findFirst();
 
-    if (episodioBuscado.isPresent()) {
-      System.out.println("Episódio encontrado: " + episodioBuscado.get().getTemperada());
-    } else {
-      System.out.println("Episódio não encontrado");
-    }
+    // if (episodioBuscado.isPresent()) {
+    //   System.out.println("Episódio encontrado: " + episodioBuscado.get().getTemperada());
+    // } else {
+    //   System.out.println("Episódio não encontrado");
+    // }
 
     // System.out.println("A partir de qual ano deseja assistir?");
     // var ano = scanner.nextInt();
@@ -107,5 +108,11 @@ public class Principal {
     // e.getTitulo() + " Data de Lançamento: " +
     // e.getDataLancamento().format(formatter));
     // });
+ 
+    Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+        .filter(e -> e.getAvaliacao() != 0.0)
+        .collect(Collectors.groupingBy(Episodio::getTemperada, Collectors.averagingDouble(Episodio::getAvaliacao)));
+
+    System.out.println(avaliacoesPorTemporada);
   }
 }
